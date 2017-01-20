@@ -32,7 +32,7 @@ import play.data.*;
 import static play.data.Form.*;
 
 public class MainController extends Controller {
-	private final static boolean startWithGui = true;
+	private final static boolean startWithGui = false;
 	static IHeadController controller;
 	
 	//@play.mvc.Security.Authenticated(Secured.class)
