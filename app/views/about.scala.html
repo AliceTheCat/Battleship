@@ -1,0 +1,79 @@
+@(page: String)
+
+@main(page) {
+	<div class="well">
+		<div style="font-family: sans-serif;">
+		<div class="panel-group" id="accordion">
+		  <div class="panel panel-default">
+			<div class="panel-heading">
+			  <h4 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+					<b> Allgemein</b>
+				</a>
+			  </h4>
+			</div>
+			<div id="collapseOne" class="panel-collapse collapse in">
+			  <div class="panel-body">
+				<p>Schiffe versenken, auch Schiffchen versenken, Flottenmanöver, Kreuzerkrieg oder Seeschlacht genannt, ist ein Spiel mit einfachen Mitteln.
+				Es besitzt strategische Elemente, auch wenn man die einfache Version nicht unbedingt als strategisch relevant bezeichnen kann.</p>
+				<div align="center">
+				<img src="http://upload.wikimedia.org/wikipedia/commons/b/bf/Schiffeversenk.jpg" alt="Schiffeversenken" class="img-rounded">
+				</div>
+			 </div>
+		</div>
+	  </div>
+	  <div class="panel panel-default">
+		<div class="panel-heading">
+		  <h4 class="panel-title">
+			<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+				<b>Ziel des Spieles</b>
+			</a>
+		  </h4>
+		</div>
+		<div id="collapseTwo" class="panel-collapse collapse">
+		  <div class="panel-body">
+			<p>Jeder Spieler versteckt eine kleine Flotte von Schiffen vor seinem Gegner. Derjenige, der zuerst alle Schiffe des Gegners komplett getroffen und versenkt hat, gewinnt.</p>
+
+			<p>Die Anzahl der Schiffe werden mit der Größe des Spielfeldes größer.</p>
+		</div>
+		</div>
+	  </div>
+	  <div class="panel panel-default">
+		<div class="panel-heading">
+		  <h4 class="panel-title">
+			<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+				<b>Das Einsetzen der Schiffe</b>
+			</a>
+		  </h4>
+		</div>
+		<div id="collapseThree" class="panel-collapse collapse">
+		  <div class="panel-body">
+				<p>Vor dem ersten Zug muss jeder seine Schiffe einsetzen. Die Schiffe müssen so eingesetzt werden, dass sie sich weder horizontal noch vertikal berühren - sie dürfen also nicht an einer Kante angrenzen, diagonales Berühren über Eck ist zulässig. 
+				Wähle ein Schiff durch Anklicken, drehe es gegebenenfalls durch den entsprechenden Button. Schiebe es über das Brett bis die Position stimmt und klicke dann, um es abzusetzen. Wenn du ein Schiff wieder entfernen willst, kannst du es durch Anklicken wieder zurücknehmen. Sind alle Schiffe eingesetzt, bestätige und das Spiel kann starten.</p> 
+				</div>
+			</div>
+		  </div>
+		<div class="panel panel-default">
+		<div class="panel-heading">
+		  <h4 class="panel-title">
+			<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+				<b>Auf Felder schießen</b>
+			</a>
+		  </h4>
+		</div>
+		<div id="collapseFour" class="panel-collapse collapse">
+		  <div class="panel-body">
+					<p>Von jetzt an siehst du immer zwei Spielbretter:
+					Im unteren Brett kannst du deine eigenen Schüsse und deren Erfolge sehen.
+					Im oberen Brett siehst du deine Schiffe und die Treffer deines Gegners.
+					Feuere auf ein bestimmtes Feld, indem du im unteren Brett auf das gewünschte Feld klickst. Bestätige und du siehst sofort, ob du getroffen hast.</p> 
+				</div>
+			</div>
+			</div>
+		  </div>
+		  <p></p>
+		<p><small>Quelle des <a href="http://www.brettspielnetz.de/spielregeln/schiffe+versenken.php">Textes</a></small> und 
+		<small><a href="http://de.wikipedia.org/wiki/Schiffe_versenken">Bildes</a></small></p> 
+		</div>
+	</div>
+}

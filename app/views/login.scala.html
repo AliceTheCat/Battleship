@@ -1,0 +1,45 @@
+@(form: play.data.Form[MainController.User], msg: String, page: String)
+@main(page){
+<link rel="stylesheet" href='@routes.Assets.at("stylesheets/login.css")' />
+<html>
+<div class="login">
+   @helper.form(routes.MainController.authenticate) {
+   <div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title"><strong>Sign in</strong></h3>
+   </div>
+   <div class="centertext">
+   <div class="panel-body">
+   @if(form.hasGlobalErrors) {
+    <p class="error">
+        @form.globalError.message
+    </p>
+}            @if(msg != null) {
+                <div class="error-message">
+                    <p><font color="#FF0000">@msg</font></p>
+                </div>
+            }
+	<div class="form-horizontal">
+	<div class="form-group">
+		<label for="inputEmail3" class="col-sm-5 control-label">Email</label>
+		<div class="col-sm-4">
+			<input type="email" class="form-control" name="email" id="inputEmail3" placeholder="Email" value="@form("email").value">
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="inputPassword3" class="col-sm-5 control-label">Password</label>
+		<div class="col-sm-4">
+			<input type="password" class="form-control" name="password" id="inputPassword3" placeholder="Password">
+		</div>
+	</div>
+    <button type="submit" class="btn btn-default">Login</button>
+	</div>
+	<p></p>
+	<a href="http://localhost:9000/openID/auth"><img width="200" src="https://developers.google.com/accounts/images/sign-in-with-google.png"></a>
+	</div>
+	</div>
+	</div>
+	</div>
+}
+</html>
+}

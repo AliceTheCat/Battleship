@@ -1,0 +1,234 @@
+@(loginname: String, headController: controller.IHeadController, page: String)
+
+@main(page){
+	<script type='text/javascript' src='@routes.Assets.at("javascripts/index.js")'></script>
+	<script type='text/javascript' src='@routes.Assets.at("javascripts/ajax.js")'></script>
+	<link rel="stylesheet" href='@routes.Assets.at("stylesheets/Battleship.css")' />
+	<script language="JavaScript">
+		$( window ).load(function() {
+			@if(headController.getMatch != null && headController.isGameEnd()){
+				$('#gameEndModal').modal('show');
+			}
+		});
+		function openNewGameModal(){
+			@if(headController.getMatch != null && headController.isGameEnd()){
+				$('#gameEndModal').modal('hide')
+			}
+			$('#newGameModal').modal('show');
+		}
+	</script>
+	<nav class="navbar navbar-default" role="navigation">
+	  <!-- Brand and toggle get grouped for better mobile display -->
+	  <div class="navbar-header">
+	    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	      <span class="sr-only">Toggle navigation</span>
+	      <span class="icon-bar"></span>
+	      <span class="icon-bar"></span>
+	      <span class="icon-bar"></span>
+	    </button>
+	  </div>
+	    
+	
+	  <!-- Collect the nav links, forms, and other content for toggling -->
+	  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	    <ul class="nav navbar-nav">
+	      <li class="dropdown">
+	      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Spiel <b class="caret"></b></a>
+	        <ul class="dropdown-menu">
+	          <li><a href="#" onclick="openNewGameModal()">Neues Spiel erstellen</a></li>
+	          <li class="divider"></li>
+	          <li><a href="/command/e">Exit Game</a></li>
+	        </ul>
+	      </li>
+	      <li class="dropdown">
+	      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Befehl <b class="caret"></b></a>
+	        <ul class="dropdown-menu">
+	          <li><a href="#" onclick="undo()">Undo</a></li>
+	          <li><a href="#" onclick="redo()">Redo</a></li>
+	        </ul>
+	      </li>
+	    </ul>
+		<div class="navbar-button navbar-right">
+		<ul class="nav navbar-nav">
+		<li class="dropdown">
+	      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span><b class="caret"></b></a>
+	        <ul class="dropdown-menu">
+	          <li><a href="/logout">Logout</a></li>
+	        </ul>
+	      </li>
+		</ul></div>
+		<div class="navbar-text navbar-right" style="margin-right: 5px;">Signed in as @loginname </div>
+	  </div><!-- /.navbar-collapse -->
+	</nav>
+    <div class="well">
+	@if(headController.getMatch != null){
+	<div class="row">
+	<div class="col-md-1"></div>
+		<div class="col-md-4">
+		Platzierungsart:
+		<div class="btn-group" data-toggle="buttons" style="padding-bottom: 5px; padding-top: 5px;"> 
+			<label class="btn btn-default">
+				<input type="radio" name="type" id="horizontal"> Horizontal
+			</label>
+			<label class="btn btn-default">
+				<input type="radio" name="type" id="vertical"> Vertical
+			</label>
+		</div>
+		</div>
+		<div class="col-md-7" style="padding-bottom: 5px; padding-top: 5px;">
+		<span id="schiffgroesse">Schiffgröße:</span>
+		<div id="placementType" class="btn-group" data-toggle="buttons">
+				@for((zahl,i) <- headController.getMatch().getPlayerOne().getShipListToPlace().view.zipWithIndex){  
+					<label class="btn btn-default">
+						<input type="radio" name="size" id="zahl@i" title="@zahl"> @zahl
+					</label>
+				}
+			</div>
+		</div>
+		</div>
+		}
+		<div class="row">
+		<div class="col-md-8">
+		<div class="align">
+			@if(headController.getMatch != null){
+				<div class="title">
+					Feld zum platzieren der Schiffe:
+				</div>
+				<div class="grid">
+					<div class="gridrow">
+							<span class="cell">
+								@@
+							</span>
+							@for(i <-0 until headController.getMatch.getMapSizeX){
+								<span class="cell">
+									@{var buchstabe = i + 65; buchstabe.toChar}
+								</span>
+						}
+					</div>
+					<br>
+					@for(y <- 0 until headController.getMatch.getMapSizeY) {
+						<div class="gridrow">
+							<span class="cell">
+								@{var zahl = y + 1; zahl}
+							</span>
+						@for(x <- 0 until headController.getMatch.getMapSizeX) {
+							<span id = deffcell@y@x @if(headController.isPlacedShip(y,x,true,true)) {class="placedShip"}
+									@if(headController.isWater(y,x,true,true)) {class="water" onmouseover="enterCell(@{headController.GridRowToMapRow(y,x)},'@{headController.GridColumnToMapColumn(y,x)}')" onmouseout="leaveCell(@{headController.GridRowToMapRow(y,x)},'@{headController.GridColumnToMapColumn(y,x)}')"}
+									@if(headController.isWaterHit(y,x,true,true)) {class="water"}
+									@if(headController.isShipHit(y,x,true,true)) {class="placedShip"}
+									@if(headController.isShipHit(y,x,true,true) && headController.isShipDestroyed(y,x,true,true)) {class="playerShipDestroyed"}
+									@if(true){onclick="place(@{headController.GridRowToMapRow(y,x)},'@{headController.GridColumnToMapColumn(y,x)}')"}>
+									<span id = deffinnercell@y@x @if(headController.isWaterHit(y,x,true,true) || headController.isShipHit(y,x,true,true)){class="enemyHit"}></span>
+							</span>
+						}
+						</div>
+						<br>
+					}
+				</div>
+				<div class="title">
+					Feld zum attackieren der Schiffe:
+				</div>
+				<div class="grid">
+					<div class="gridrow">
+							<span class="cell">
+								@@
+							</span>
+							@for(i <-0 until headController.getMatch.getMapSizeX){
+								<span class="cell">
+									@{var buchstabe = i + 65; buchstabe.toChar}
+								</span>
+						}
+					</div>
+					<br>
+					@for(y <- 0 until headController.getMatch.getMapSizeY) {
+						<div class="gridrow">
+							<span class="cell">
+								@{var zahl = y + 1; zahl}
+							</span>
+						@for(x <- 0 until headController.getMatch.getMapSizeX) {
+							<span id = offcell@y@x @if(headController.isShipHit(y,x,false,true)) {@if(headController.isShipDestroyed(y,x,false,true)){class="enemyShipDestroyed"}else{class="placedShip"}}else{class="water"}
+									@if(true){onclick="attack(@{headController.GridRowToMapRow(y,x)},'@{headController.GridColumnToMapColumn(y,x)}')"}>
+									<span id = offinnercell@y@x @if(headController.isWaterHit(y,x,false,true) || headController.isShipHit(y,x,false,true)){class="playerHit"}></span>
+							</span>
+						}
+						</div>
+						<br>
+					}
+				</div>
+			}
+			
+			</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel panel-primary" style="margin-top: 15px; margin-left: 5px; margin-right: 5px;">
+				  <div class="panel-heading">
+					<h3 class="panel-title">Info</h3>
+				  </div>
+				  <div id="cmdMsg" class="panel-body">
+					@headController.getNextOptionsAsString
+				</div>
+				<div class="panel-footer">
+					<div id="logMsg" style="font-style: italic; font-style: italic; font-variant: small-caps; text-align: -webkit-center;"></div>
+				</div>
+				</div>
+			</div>
+		</div>
+    </div>
+	
+	<!-- Modal GameEnd-->
+	<div class="modal fade" id="gameEndModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="myModalLabel">Spielende</h4>
+		  </div>
+		  <div class="modal-body" id = "gameEndMsg">
+		  @if(headController.getMatch != null && headController.isGameEnd()){
+			@headController.getEndMessage();
+			}
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-primary" onclick="openNewGameModal()">Neues Spiel</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+		  </div>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	<!-- Modal newGame-->
+	<div class="modal fade" id="newGameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title" id="myModalLabel">Neues Spiel</h4>
+		  </div>
+		  <div class="modal-body">
+			<form class="form-horizontal" role="form">
+			  <div class="form-group">
+				<label for="inputRow" class="col-sm-2 control-label">Reihengröße</label>
+				<div class="col-sm-offset-1 col-sm-9">
+				  <input type="number" class="form-control" id="inputRow" placeholder="z.B.: 5">
+				</div>
+			  </div>
+			  <div class="form-group">
+				<label for="inputColumn" class="col-sm-2 control-label">Spaltengröße</label>
+				<div class="col-sm-offset-1 col-sm-9">
+				  <input type="number" class="form-control" id="inputColumn" placeholder="z.B.: 5">
+				</div>
+			  </div>
+			  <div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					  Reihen- und Spaltengröße muss größer als 1 sein.
+				</div>
+			  </div>
+			</form>
+		  </div>
+		  <div class="modal-footer">
+			<button type="submit" class="btn btn-primary" onclick="createNewGame()">Erstellen</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+		  </div>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+}
