@@ -35,7 +35,7 @@ public class MainController extends Controller {
 	private final static boolean startWithGui = false;
 	static IHeadController controller;
 	
-	//@play.mvc.Security.Authenticated(Secured.class)
+	@play.mvc.Security.Authenticated(Secured.class)
     public static Result index() {
 		String email = session("email");
         System.out.println(email);
